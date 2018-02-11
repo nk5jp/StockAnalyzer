@@ -13,6 +13,8 @@ public class Stock {
     private int code;
     @Getter @Setter
     private String name;
+    @Getter @Setter
+    private boolean isDisplayed;
     @Getter
     private List<StockDetail> stockDetails;
 
