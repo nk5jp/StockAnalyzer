@@ -6,6 +6,7 @@ import java.util.List;
 
 import jp.nk5.stockanalyzer.ViewModel.CurrentPrice;
 import jp.nk5.stockanalyzer.ViewModel.MainViewModel;
+import jp.nk5.stockanalyzer.ViewModel.UpdateViewListener;
 import jp.nk5.stockanalyzer.domain.Stock;
 import jp.nk5.stockanalyzer.domain.StockDetailSearcher;
 import jp.nk5.stockanalyzer.domain.StockRepository;
@@ -19,10 +20,11 @@ public class MainApplication implements SearchMinkabuListener {
     private MainViewModel viewModel;
     private StockDetailSearcher searcher;
     private StockRepository repository;
+    private UpdateViewListener listener;
 
-    public MainApplication(Context context, MainViewModel viewModel)
+    public MainApplication(UpdateViewListener listener, MainViewModel viewModel)
     {
-        this.context = context;
+        this.listener = listener;
         this.viewModel = viewModel;
         searcher = new StockDetailSearcherMinkabu(this);
         repository = new StockRepositoryDB();
@@ -48,6 +50,7 @@ public class MainApplication implements SearchMinkabuListener {
                     )
             );
         }
+        listener.updateView();
     }
 
     @Override
