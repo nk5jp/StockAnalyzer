@@ -9,9 +9,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.nk5.stockanalyzer.domain.Stock;
+import jp.nk5.stockanalyzer.domain.CurrentStock;
 
-public class SearchMinkabuAsyncTask extends AsyncTask<List<Stock>, Void, List<String>> {
+public class SearchMinkabuAsyncTask extends AsyncTask<List<CurrentStock>, Void, List<CurrentStock>> {
 
     private SearchMinkabuListener listener;
     private final Integer INTEGER_FAILED = -1;
@@ -27,14 +27,13 @@ public class SearchMinkabuAsyncTask extends AsyncTask<List<Stock>, Void, List<St
         listener.lockUI();
     }
 
-    protected List<String> doInBackground(List<Stock>... stocks_array)
+    protected List<CurrentStock> doInBackground(List<CurrentStock>... stocks_array)
     {
-        List<Stock> stocks = stocks_array[0];
-        List<String> resultStrings = new ArrayList<String>();
+        List<CurrentStock> stocks = stocks_array[0];
         HttpURLConnection connection = null;
         String urlFormat = "https://minkabu.jp/stock/%d";
 
-        for (Stock stock : stocks) {
+        for (CurrentStock stock : stocks) {
 
             // 接続の確立
             try {
@@ -57,28 +56,30 @@ public class SearchMinkabuAsyncTask extends AsyncTask<List<Stock>, Void, List<St
                 while ((line = reader.readLine()) != null) {
                     if (line.contains("stock_label fsl")) {
                         line = reader.readLine();
-                        result = result + ":" + line.split("\\(")[1].split("\\)")[0];
+                        stock.setRemarks(line.split("\\(")[1].split("\\)")[0]);
                     }
                     if (line.contains("stock_price")) {
                         line = reader.readLine();
-                        result = result + ":" + line.split("\\.")[0].replace(" ", "").replace(",", "");
-                        resultStrings.add(result);
+                        stock.setPrice(
+                                Integer.parseInt(
+                                    line.split("\\.")[0].replace(" ", "").replace(",", "")
+                                )
+                        );
                         break;
                     }
                 }
             } catch (Exception e) {
-                return resultStrings;
+                return stocks;
             }
         }
-
-        return resultStrings;
+        return stocks;
     }
 
 
-    protected void onPostExecute(List<String> strings)
+    protected void onPostExecute(List<CurrentStock> stocks)
     {
         listener.unlockUI();
-        listener.updateUI(strings);
+        listener.updateUI(stocks);
     }
 
     protected void onCancelled()

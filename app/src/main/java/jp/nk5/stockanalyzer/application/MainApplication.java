@@ -1,55 +1,38 @@
 package jp.nk5.stockanalyzer.application;
 
-import android.content.Context;
-
 import java.util.List;
 
-import jp.nk5.stockanalyzer.ViewModel.CurrentPrice;
 import jp.nk5.stockanalyzer.ViewModel.MainViewModel;
 import jp.nk5.stockanalyzer.ViewModel.UpdateViewListener;
+import jp.nk5.stockanalyzer.domain.CurrentStock;
 import jp.nk5.stockanalyzer.domain.Stock;
-import jp.nk5.stockanalyzer.domain.StockDetailSearcher;
-import jp.nk5.stockanalyzer.domain.StockRepository;
+import jp.nk5.stockanalyzer.domain.CurrentPriceRepository;
+import jp.nk5.stockanalyzer.domain.ClosingPriceRepository;
 import jp.nk5.stockanalyzer.infra.SearchMinkabuListener;
-import jp.nk5.stockanalyzer.infra.StockDetailSearcherMinkabu;
-import jp.nk5.stockanalyzer.infra.StockRepositoryDB;
+import jp.nk5.stockanalyzer.infra.CurrentPriceRepositoryMinkabu;
+import jp.nk5.stockanalyzer.infra.ClosingPriceRepositoryDB;
 
 public class MainApplication implements SearchMinkabuListener {
 
-    private Context context;
     private MainViewModel viewModel;
-    private StockDetailSearcher searcher;
-    private StockRepository repository;
+    private CurrentPriceRepository repository;
     private UpdateViewListener listener;
 
     public MainApplication(UpdateViewListener listener, MainViewModel viewModel)
     {
         this.listener = listener;
         this.viewModel = viewModel;
-        searcher = new StockDetailSearcherMinkabu(this);
-        repository = new StockRepositoryDB();
+        repository = new CurrentPriceRepositoryMinkabu(this);
     }
 
     public void getCurrentPrices()
     {
-        List<Stock> stocks = repository.getDisplayedStocks();
-        searcher.getStockByCodes(stocks);
+        repository.getAllDisplayedStocks();
     }
 
     @Override
-    public void updateUI(List<String> strings) {
-        for(String string : strings)
-        {
-            String[] array = string.split(":");
-            viewModel.getCurrentPrices().add(
-                    new CurrentPrice(
-                            Integer.parseInt(array[0]),
-                            array[1],
-                            array[2],
-                            Integer.parseInt(array[3])
-                    )
-            );
-        }
+    public void updateUI(List<CurrentStock> stocks) {
+        viewModel.setCurrentStocks(stocks);
         listener.updateView();
     }
 

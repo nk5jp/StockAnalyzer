@@ -9,14 +9,14 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import jp.nk5.stockanalyzer.ViewModel.CurrentPrice;
+import jp.nk5.stockanalyzer.domain.CurrentStock;
 
-public class CurrentPriceAdapter extends ArrayAdapter<CurrentPrice> {
+public class CurrentStockAdapter extends ArrayAdapter<CurrentStock> {
 
     private LayoutInflater layoutInflater;
 
-    public CurrentPriceAdapter(Context context, int id, List<CurrentPrice> prices) {
-        super(context, id, prices);
+    public CurrentStockAdapter(Context context, int id, List<CurrentStock> stocks) {
+        super(context, id, stocks);
         this.layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -28,9 +28,9 @@ public class CurrentPriceAdapter extends ArrayAdapter<CurrentPrice> {
             view = layoutInflater.inflate(android.R.layout.simple_spinner_dropdown_item, null);
         }
 
-        CurrentPrice price = (CurrentPrice) getItem(position);
+        CurrentStock stock = (CurrentStock) getItem(position);
         TextView textView = (TextView) view.findViewById(android.R.id.text1);
-        textView.setText(price.getCode() + " : " + price.getName() + " : " + price.getDateString() +" : "+ price.getPrice());
+        textView.setText(stock.getCode() + " : " + stock.getName() + " : " + stock.getRemarks() +" : "+ stock.getPrice());
         return view;
     }
 }

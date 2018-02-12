@@ -6,11 +6,11 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-import jp.nk5.stockanalyzer.ViewModel.CurrentPrice;
 import jp.nk5.stockanalyzer.ViewModel.MainViewModel;
 import jp.nk5.stockanalyzer.ViewModel.UpdateViewListener;
-import jp.nk5.stockanalyzer.adapter.CurrentPriceAdapter;
+import jp.nk5.stockanalyzer.adapter.CurrentStockAdapter;
 import jp.nk5.stockanalyzer.application.MainApplication;
+import jp.nk5.stockanalyzer.domain.CurrentStock;
 
 public class MainActivity extends Activity implements UpdateViewListener {
 
@@ -21,7 +21,7 @@ public class MainActivity extends Activity implements UpdateViewListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        viewModel = new MainViewModel(new ArrayList<CurrentPrice>());
+        viewModel = new MainViewModel(new ArrayList<CurrentStock>());
         application = new MainApplication(this, this.viewModel);
     }
 
@@ -34,7 +34,7 @@ public class MainActivity extends Activity implements UpdateViewListener {
 
     public void updateView()
     {
-        CurrentPriceAdapter adapter = new CurrentPriceAdapter(this, android.R.layout.simple_list_item_1, viewModel.getCurrentPrices());
+        CurrentStockAdapter adapter = new CurrentStockAdapter(this, android.R.layout.simple_list_item_1, viewModel.getCurrentStocks());
         ListView listView = (ListView)this.findViewById(R.id.listView1);
         listView.setAdapter(adapter);
     }

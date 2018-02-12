@@ -1,16 +1,16 @@
 package jp.nk5.stockanalyzer.ViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import jp.nk5.stockanalyzer.domain.Stock;
+import jp.nk5.stockanalyzer.domain.CurrentStock;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 @AllArgsConstructor
 public class MainViewModel {
 
-    @Getter
-    private List<CurrentPrice> currentPrices;
+    @Getter @Setter
+    private List<CurrentStock> currentStocks;
 
 }

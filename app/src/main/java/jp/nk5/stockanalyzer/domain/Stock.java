@@ -6,16 +6,17 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.AllArgsConstructor;
 
-@AllArgsConstructor
-public class Stock {
+public abstract class Stock {
 
     @Getter
     private int code;
     @Getter @Setter
     private String name;
-    @Getter @Setter
-    private boolean isDisplayed;
-    @Getter
-    private List<StockDetail> stockDetails;
+
+    public Stock (int code, String name)
+    {
+        this.code = code;
+        this.name = name;
+    }
 
 }

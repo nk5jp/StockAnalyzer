@@ -5,7 +5,7 @@ import lombok.Setter;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class StockDetail {
+public class DailyData {
 
     @Getter
     private int year;
