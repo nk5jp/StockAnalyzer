@@ -1,4 +1,4 @@
-package jp.nk5.stockanalyzer.ViewModel;
+package jp.nk5.stockanalyzer.viewmodel;
 
 import java.util.List;
 

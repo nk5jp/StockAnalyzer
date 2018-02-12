@@ -6,8 +6,8 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-import jp.nk5.stockanalyzer.ViewModel.MainViewModel;
-import jp.nk5.stockanalyzer.ViewModel.UpdateViewListener;
+import jp.nk5.stockanalyzer.viewmodel.MainViewModel;
+import jp.nk5.stockanalyzer.viewmodel.UpdateViewListener;
 import jp.nk5.stockanalyzer.adapter.CurrentStockAdapter;
 import jp.nk5.stockanalyzer.application.MainApplication;
 import jp.nk5.stockanalyzer.domain.CurrentStock;

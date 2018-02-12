@@ -1,4 +1,4 @@
-package jp.nk5.stockanalyzer.ViewModel;
+package jp.nk5.stockanalyzer.viewmodel;
 
 public interface UpdateViewListener {
 

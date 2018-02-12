@@ -2,15 +2,12 @@ package jp.nk5.stockanalyzer.application;
 
 import java.util.List;
 
-import jp.nk5.stockanalyzer.ViewModel.MainViewModel;
-import jp.nk5.stockanalyzer.ViewModel.UpdateViewListener;
+import jp.nk5.stockanalyzer.viewmodel.MainViewModel;
+import jp.nk5.stockanalyzer.viewmodel.UpdateViewListener;
 import jp.nk5.stockanalyzer.domain.CurrentStock;
-import jp.nk5.stockanalyzer.domain.Stock;
 import jp.nk5.stockanalyzer.domain.CurrentPriceRepository;
-import jp.nk5.stockanalyzer.domain.ClosingPriceRepository;
 import jp.nk5.stockanalyzer.infra.SearchMinkabuListener;
 import jp.nk5.stockanalyzer.infra.CurrentPriceRepositoryMinkabu;
-import jp.nk5.stockanalyzer.infra.ClosingPriceRepositoryDB;
 
 public class MainApplication implements SearchMinkabuListener {
 

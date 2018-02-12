@@ -23,9 +23,9 @@ public class CurrentPriceRepositoryMinkabu implements CurrentPriceRepository {
     {
 
         List<CurrentStock> stocks = new ArrayList<CurrentStock>();
-        stocks.add(new CurrentStock(8410, "セブン銀行", UNSEARCHED_PRICE, UNSEARCHED_REMARKS));
-        stocks.add(new CurrentStock(9501, "東京電力", UNSEARCHED_PRICE, UNSEARCHED_REMARKS));
-        stocks.add(new CurrentStock(9697, "カプコン", UNSEARCHED_PRICE, UNSEARCHED_REMARKS));
+        stocks.add(new CurrentStock(7203, "トヨタ", UNSEARCHED_PRICE, UNSEARCHED_REMARKS));
+        stocks.add(new CurrentStock(7974, "任天堂", UNSEARCHED_PRICE, UNSEARCHED_REMARKS));
+        stocks.add(new CurrentStock(6758, "ソニー", UNSEARCHED_PRICE, UNSEARCHED_REMARKS));
         return stocks;
     }
 
