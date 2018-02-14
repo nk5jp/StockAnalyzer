@@ -10,31 +10,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jp.nk5.stockanalyzer.domain.CurrentStock;
+import jp.nk5.stockanalyzer.domain.Stock;
 
-public class SearchMinkabuAsyncTask extends AsyncTask<List<CurrentStock>, Void, List<CurrentStock>> {
+public class SearchMinkabuAsyncTask extends AsyncTask<Stock, Void, List<CurrentStock>> {
 
     private SearchMinkabuListener listener;
-    private final Integer INTEGER_FAILED = -1;
+    private final String UNDEFINED_REMARK = "NONE";
+    private final int UNDEFINED_PRICE = -1;
 
     public SearchMinkabuAsyncTask(SearchMinkabuListener listener)
     {
         this.listener = listener;
     }
 
-
     protected void onPostExecute()
     {
         listener.lockUI();
     }
 
-    protected List<CurrentStock> doInBackground(List<CurrentStock>... stocks_array)
+    protected List<CurrentStock> doInBackground(Stock... stocks)
     {
-        List<CurrentStock> stocks = stocks_array[0];
+        List<CurrentStock> currentStocks = new ArrayList<CurrentStock>();
         HttpURLConnection connection = null;
         String urlFormat = "https://minkabu.jp/stock/%d";
 
-        for (CurrentStock stock : stocks) {
-
+        for (Stock stock : stocks) {
             // 接続の確立
             try {
                 URL url = new URL(String.format(urlFormat, stock.getCode()));
@@ -46,33 +46,33 @@ public class SearchMinkabuAsyncTask extends AsyncTask<List<CurrentStock>, Void, 
                 // 接続
                 connection.connect();
             } catch (Exception e) {
-                break;
+                return null;
             }
 
             //必要な情報の取得
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF8"))) {
-                String result = stock.getCode() + ":" + stock.getName();
-                String line = reader.readLine();
+                String line;
+                String remark = UNDEFINED_REMARK;
+                int price = UNDEFINED_PRICE;
                 while ((line = reader.readLine()) != null) {
                     if (line.contains("stock_label fsl")) {
                         line = reader.readLine();
-                        stock.setRemarks(line.split("\\(")[1].split("\\)")[0]);
+                        remark = line.split("\\(")[1].split("\\)")[0];
                     }
                     if (line.contains("stock_price")) {
                         line = reader.readLine();
-                        stock.setPrice(
-                                Integer.parseInt(
+                        price = Integer.parseInt(
                                     line.split("\\.")[0].replace(" ", "").replace(",", "")
-                                )
-                        );
+                                );
                         break;
                     }
                 }
+                currentStocks.add(new CurrentStock(stock.getCode(), stock.getName(), price, remark));
             } catch (Exception e) {
-                return stocks;
+                return null;
             }
         }
-        return stocks;
+        return currentStocks;
     }
 
 

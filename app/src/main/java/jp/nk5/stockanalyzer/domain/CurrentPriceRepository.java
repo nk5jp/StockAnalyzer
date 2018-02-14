@@ -4,6 +4,6 @@ import java.util.List;
 
 public interface CurrentPriceRepository {
 
-    void getAllDisplayedStocks ();
+    void getAllCurrentPrices(List<Stock> stocks);
 
 }

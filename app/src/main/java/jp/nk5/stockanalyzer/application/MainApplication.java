@@ -2,6 +2,8 @@ package jp.nk5.stockanalyzer.application;
 
 import java.util.List;
 
+import jp.nk5.stockanalyzer.domain.StockRepository;
+import jp.nk5.stockanalyzer.infra.StockRepositoryDB;
 import jp.nk5.stockanalyzer.viewmodel.MainViewModel;
 import jp.nk5.stockanalyzer.viewmodel.UpdateViewListener;
 import jp.nk5.stockanalyzer.domain.CurrentStock;
@@ -12,25 +14,32 @@ import jp.nk5.stockanalyzer.infra.CurrentPriceRepositoryMinkabu;
 public class MainApplication implements SearchMinkabuListener {
 
     private MainViewModel viewModel;
-    private CurrentPriceRepository repository;
+    private CurrentPriceRepository currentPriceRepository;
+    private StockRepository stockRepository;
     private UpdateViewListener listener;
 
     public MainApplication(UpdateViewListener listener, MainViewModel viewModel)
     {
         this.listener = listener;
         this.viewModel = viewModel;
-        repository = new CurrentPriceRepositoryMinkabu(this);
+        currentPriceRepository = new CurrentPriceRepositoryMinkabu(this);
+        stockRepository = new StockRepositoryDB();
     }
 
     public void getCurrentPrices()
     {
-        repository.getAllDisplayedStocks();
+        currentPriceRepository.getAllCurrentPrices(stockRepository.getAllStock());
     }
 
     @Override
     public void updateUI(List<CurrentStock> stocks) {
-        viewModel.setCurrentStocks(stocks);
-        listener.updateView();
+        if (stocks == null)
+        {
+            listener.showError();
+        } else {
+            viewModel.setCurrentStocks(stocks);
+            listener.updateView();
+        }
     }
 
     @Override
