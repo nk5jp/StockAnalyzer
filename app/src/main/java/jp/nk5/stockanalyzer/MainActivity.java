@@ -1,8 +1,11 @@
 package jp.nk5.stockanalyzer;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -22,7 +25,7 @@ public class MainActivity extends Activity implements UpdateViewListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         viewModel = new MainViewModel(new ArrayList<CurrentStock>());
-        application = new MainApplication(this, this.viewModel);
+        application = new MainApplication(this,this, this.viewModel);
     }
 
     @Override
@@ -32,6 +35,12 @@ public class MainActivity extends Activity implements UpdateViewListener {
         application.getCurrentPrices();
     }
 
+    public void onClickStockButton(View view)
+    {
+        Intent intent = new Intent(this, StockActivity.class);
+        startActivity(intent);
+    }
+
     public void updateView()
     {
         CurrentStockAdapter adapter = new CurrentStockAdapter(this, android.R.layout.simple_list_item_1, viewModel.getCurrentStocks());
@@ -39,9 +48,9 @@ public class MainActivity extends Activity implements UpdateViewListener {
         listView.setAdapter(adapter);
     }
 
-    public void showError()
+    public void showError(String error)
     {
-
+        Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
     }
 
 }

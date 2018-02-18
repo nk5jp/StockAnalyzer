@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">StockAnalyzer</string>
+    <string name="str_stock">Stock</string>
+    <string name="str_code">Code</string>
+    <string name="str_name">Name</string>
+    <string name="str_add">Add</string>
 </resources>

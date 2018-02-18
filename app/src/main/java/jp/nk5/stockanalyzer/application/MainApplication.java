@@ -1,5 +1,7 @@
 package jp.nk5.stockanalyzer.application;
 
+import android.content.Context;
+
 import java.util.List;
 
 import jp.nk5.stockanalyzer.domain.StockRepository;
@@ -18,24 +20,28 @@ public class MainApplication implements SearchMinkabuListener {
     private StockRepository stockRepository;
     private UpdateViewListener listener;
 
-    public MainApplication(UpdateViewListener listener, MainViewModel viewModel)
+    public MainApplication(Context context, UpdateViewListener listener, MainViewModel viewModel)
     {
         this.listener = listener;
         this.viewModel = viewModel;
         currentPriceRepository = new CurrentPriceRepositoryMinkabu(this);
-        stockRepository = new StockRepositoryDB();
+        stockRepository = StockRepositoryDB.getInstance(context);
     }
 
     public void getCurrentPrices()
     {
-        currentPriceRepository.getAllCurrentPrices(stockRepository.getAllStock());
+        try {
+            currentPriceRepository.getAllCurrentPrices(stockRepository.getAllStock());
+        } catch (Exception e) {
+            listener.showError("cannot get current prices");
+        }
     }
 
     @Override
     public void updateUI(List<CurrentStock> stocks) {
         if (stocks == null)
         {
-            listener.showError();
+            listener.showError("stocks are null");
         } else {
             viewModel.setCurrentStocks(stocks);
             listener.updateView();

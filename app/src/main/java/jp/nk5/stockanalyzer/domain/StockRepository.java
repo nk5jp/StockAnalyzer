@@ -4,6 +4,7 @@ import java.util.List;
 
 public interface StockRepository {
 
-    List<Stock> getAllStock();
+    List<Stock> getAllStock() throws Exception;
+    void setStock(Stock stock) throws  Exception;
 
 }
