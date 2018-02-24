@@ -24,6 +24,16 @@ public class StockApplication {
     public void addStock(int code, String name)
     {
         try {
+            if (repository.hasSameCode(code))
+            {
+                listener.showError("the code is already used");
+                return;
+            }
+            if (name.equals(""))
+            {
+                listener.showError("name is empty");
+                return;
+            }
             repository.setStock(new Stock(code, name));
         } catch (Exception e) {
             listener.showError("cannot add stock");

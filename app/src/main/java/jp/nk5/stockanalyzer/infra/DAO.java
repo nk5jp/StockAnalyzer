@@ -22,15 +22,12 @@ public abstract class DAO <T> {
         ContentValues contentValues = transformEntityToValues(entity);
 
         try (SQLiteDatabase db = DBHelper.getInstance(context).getWritableDatabase()) {
-            db.beginTransaction();
             long rowId = db.insert(tableName, null, contentValues);
             if (rowId == -1) {
                 throw new Exception();
             } else {
                 updateEntityById(entity, rowId);
-                db.setTransactionSuccessful();
             }
-            db.endTransaction();
         } catch (Exception e) {
             throw new Exception();
         }
@@ -43,15 +40,12 @@ public abstract class DAO <T> {
                 SQLiteDatabase db = DBHelper.getInstance(context).getWritableDatabase();
                 Cursor cursor = db.rawQuery(selectQuery, args);
         ) {
-            db.beginTransaction();
             if (cursor.moveToFirst()) {
                 do {
                     T entity = transformCursorToEntity(cursor);
                     list.add(entity);
                 } while (cursor.moveToNext());
-                db.setTransactionSuccessful();
             }
-            db.endTransaction();
             return list;
         } catch (Exception e) {
             throw new Exception();

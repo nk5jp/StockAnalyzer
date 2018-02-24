@@ -33,7 +33,7 @@ public class MainApplication implements SearchMinkabuListener {
         try {
             currentPriceRepository.getAllCurrentPrices(stockRepository.getAllStock());
         } catch (Exception e) {
-            listener.showError("cannot get current prices");
+            listener.showError("cannot get stock data from DB");
         }
     }
 
@@ -41,7 +41,7 @@ public class MainApplication implements SearchMinkabuListener {
     public void updateUI(List<CurrentStock> stocks) {
         if (stocks == null)
         {
-            listener.showError("stocks are null");
+            listener.showError("scraping error");
         } else {
             viewModel.setCurrentStocks(stocks);
             listener.updateView();

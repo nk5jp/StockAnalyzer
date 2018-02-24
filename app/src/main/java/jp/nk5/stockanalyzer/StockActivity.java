@@ -1,16 +1,12 @@
 package jp.nk5.stockanalyzer;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import jp.nk5.stockanalyzer.application.StockApplication;
 import jp.nk5.stockanalyzer.viewmodel.StockViewModel;
-import jp.nk5.stockanalyzer.viewmodel.UpdateViewListener;
 
-public class StockActivity extends Activity implements UpdateViewListener {
+public class StockActivity extends BaseActivity {
 
     private StockViewModel viewModel;
     private StockApplication application;
@@ -25,13 +21,14 @@ public class StockActivity extends Activity implements UpdateViewListener {
 
     public void onClickAddButton (View view)
     {
-        EditText editText = findViewById(R.id.editText1);
-        int code = Integer.parseInt(editText.getText().toString());
-        editText = findViewById(R.id.editText2);
-        String name = editText.getText().toString();
-
-        application.addStock(code, name);
-        this.finish();
+        try {
+            int code = getIntegerFromEditText(R.id.editText1);
+            String name = getStringFromEditText(R.id.editText2);
+            application.addStock(code, name);
+            this.finish();
+        } catch (Exception e) {
+            showError("cannot get value from EditText");
+        }
 
     }
 
@@ -40,8 +37,4 @@ public class StockActivity extends Activity implements UpdateViewListener {
 
     }
 
-    @Override
-    public void showError(String error) {
-        Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
-    }
 }

@@ -29,19 +29,35 @@ public class StockRepositoryDB implements StockRepository {
     }
 
     public void setStock(Stock stock) throws Exception {
+        initializeCollection();
         dao.setStock(stock);
-        if (this.stocks == null)
-        {
-            this.stocks = dao.readAllStock();
-        }
         stocks.add(stock);
     }
 
+    public boolean hasSameCode(int code) throws Exception
+    {
+        initializeCollection();
+        for (Stock stock : stocks)
+        {
+            if (stock.getCode() == code)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public List<Stock> getAllStock() throws Exception {
+        initializeCollection();
+        return this.stocks;
+    }
+
+    private void initializeCollection() throws Exception
+    {
         if (this.stocks == null)
         {
             this.stocks = dao.readAllStock();
         }
-        return this.stocks;
     }
+
 }
