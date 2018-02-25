@@ -9,7 +9,6 @@ import jp.nk5.stockanalyzer.domain.StockRepository;
 
 public class StockRepositoryDB implements StockRepository {
 
-    private Context context;
     private List<Stock> stocks;
     private StockDAO dao;
     private static StockRepositoryDB instance;
@@ -24,13 +23,13 @@ public class StockRepositoryDB implements StockRepository {
     }
 
     private StockRepositoryDB(Context context) {
-        this.context = context;
         this.dao = new StockDAO(context);
     }
 
-    public void setStock(Stock stock) throws Exception {
+    public void setStock(int code, String name) throws Exception {
         initializeCollection();
-        dao.setStock(stock);
+        Stock stock = new Stock(code, name);
+        dao.createStock(stock);
         stocks.add(stock);
     }
 
@@ -50,6 +49,17 @@ public class StockRepositoryDB implements StockRepository {
     public List<Stock> getAllStock() throws Exception {
         initializeCollection();
         return this.stocks;
+    }
+
+    public void updateStock(int code, String name) throws Exception {
+        Stock tmpStock = new Stock(code, name);
+        dao.updateStock(tmpStock);
+        for (Stock stock : stocks) {
+            if (stock.getCode() == code)
+            {
+                stock.setName(name);
+            }
+        }
     }
 
     private void initializeCollection() throws Exception

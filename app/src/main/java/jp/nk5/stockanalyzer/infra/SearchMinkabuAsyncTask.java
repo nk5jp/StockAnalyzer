@@ -8,6 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import jp.nk5.stockanalyzer.domain.CurrentStock;
 import jp.nk5.stockanalyzer.domain.Stock;
@@ -15,10 +16,8 @@ import jp.nk5.stockanalyzer.domain.Stock;
 public class SearchMinkabuAsyncTask extends AsyncTask<Stock, Void, List<CurrentStock>> {
 
     private SearchMinkabuListener listener;
-    private final String UNDEFINED_REMARK = "NONE";
-    private final int UNDEFINED_PRICE = -1;
 
-    public SearchMinkabuAsyncTask(SearchMinkabuListener listener)
+    SearchMinkabuAsyncTask(SearchMinkabuListener listener)
     {
         this.listener = listener;
     }
@@ -30,14 +29,14 @@ public class SearchMinkabuAsyncTask extends AsyncTask<Stock, Void, List<CurrentS
 
     protected List<CurrentStock> doInBackground(Stock... stocks)
     {
-        List<CurrentStock> currentStocks = new ArrayList<CurrentStock>();
-        HttpURLConnection connection = null;
+        List<CurrentStock> currentStocks = new ArrayList<>();
+        HttpURLConnection connection;
         String urlFormat = "https://minkabu.jp/stock/%d";
 
         for (Stock stock : stocks) {
             // 接続の確立
             try {
-                URL url = new URL(String.format(urlFormat, stock.getCode()));
+                URL url = new URL(String.format(Locale.JAPAN, urlFormat, stock.getCode()));
                 // 接続用HttpURLConnectionオブジェクト作成
                 connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
@@ -52,8 +51,8 @@ public class SearchMinkabuAsyncTask extends AsyncTask<Stock, Void, List<CurrentS
             //必要な情報の取得
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF8"))) {
                 String line;
-                String remark = UNDEFINED_REMARK;
-                int price = UNDEFINED_PRICE;
+                String remark = "NONE";
+                int price = -1;
                 while ((line = reader.readLine()) != null) {
                     if (line.contains("stock_label fsl")) {
                         line = reader.readLine();

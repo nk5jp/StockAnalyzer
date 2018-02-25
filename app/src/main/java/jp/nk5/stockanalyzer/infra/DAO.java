@@ -12,12 +12,12 @@ public abstract class DAO <T> {
 
     private Context context;
 
-    public DAO (Context context)
+    DAO(Context context)
     {
         this.context = context;
     }
 
-    public void create (T entity, String tableName) throws Exception
+    void create(T entity, String tableName) throws Exception
     {
         ContentValues contentValues = transformEntityToValues(entity);
 
@@ -28,17 +28,15 @@ public abstract class DAO <T> {
             } else {
                 updateEntityById(entity, rowId);
             }
-        } catch (Exception e) {
-            throw new Exception();
         }
     }
 
-    public List<T> read(String selectQuery, String[] args) throws Exception {
+    List<T> read(String selectQuery, String[] args) throws Exception {
         List<T> list = new ArrayList<>();
 
         try (
                 SQLiteDatabase db = DBHelper.getInstance(context).getWritableDatabase();
-                Cursor cursor = db.rawQuery(selectQuery, args);
+                Cursor cursor = db.rawQuery(selectQuery, args)
         ) {
             if (cursor.moveToFirst()) {
                 do {
@@ -47,13 +45,26 @@ public abstract class DAO <T> {
                 } while (cursor.moveToNext());
             }
             return list;
-        } catch (Exception e) {
-            throw new Exception();
+        }
+    }
+
+    void update(T entity, String tableName, String condition) throws Exception {
+        ContentValues contentValues = transformEntityToValues(entity);
+        try (SQLiteDatabase db = DBHelper.getInstance(context).getWritableDatabase()) {
+            db.beginTransaction();
+            long updateRaw = db.update(tableName, contentValues, condition, getArgs(entity));
+            if (updateRaw == -1) {
+                throw new Exception();
+            } else {
+                db.setTransactionSuccessful();
+            }
+            db.endTransaction();
         }
     }
 
     protected abstract T transformCursorToEntity(Cursor cursor) throws Exception;
     protected abstract ContentValues transformEntityToValues(T entity) throws Exception;
     protected abstract void updateEntityById(T entity, long rowId) throws Exception;
+    protected abstract String[] getArgs(T entity);
 
 }

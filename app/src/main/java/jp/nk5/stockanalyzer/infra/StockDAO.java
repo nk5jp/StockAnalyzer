@@ -10,7 +10,7 @@ import jp.nk5.stockanalyzer.domain.Stock;
 
 public class StockDAO extends DAO <Stock> {
 
-    public StockDAO (Context context)
+    StockDAO(Context context)
     {
         super(context);
     }
@@ -20,10 +20,16 @@ public class StockDAO extends DAO <Stock> {
         return read("select * from STOCK;", null);
     }
 
-    public void setStock(Stock stock) throws Exception
+    void createStock(Stock stock) throws Exception
     {
         create(stock, "STOCK");
     }
+
+    void updateStock(Stock stock) throws Exception
+    {
+        update(stock, "STOCK", "code = ?");
+    }
+
     @Override
     protected Stock transformCursorToEntity(Cursor cursor) throws Exception {
         return new Stock(
@@ -43,6 +49,11 @@ public class StockDAO extends DAO <Stock> {
     @Override
     protected void updateEntityById(Stock stock, long rowId) throws Exception {
         //nothing to do because the primary key is not autoincrement.
+    }
+
+    protected String[] getArgs(Stock stock)
+    {
+        return new String[]{Integer.toString(stock.getCode())};
     }
 
 }

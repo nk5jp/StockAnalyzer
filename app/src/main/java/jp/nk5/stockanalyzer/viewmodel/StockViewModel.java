@@ -1,5 +1,8 @@
 package jp.nk5.stockanalyzer.viewmodel;
 
+import java.util.List;
+
+import jp.nk5.stockanalyzer.domain.Stock;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,5 +15,6 @@ public class StockViewModel {
     @Getter @Setter
     String Name;
     @Getter @Setter
-    boolean isSelected;
+    List<Stock> stocks;
+
 }

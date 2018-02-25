@@ -7,16 +7,16 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DBHelper extends SQLiteOpenHelper {
 
     private static DBHelper instance = null;
-    static final String DB_NAME = "nk5_stockanalyzer.db";
-    static final int DB_VERSION = 1;
+    private static final String DB_NAME = "nk5_stockanalyzer.db";
+    private static final int DB_VERSION = 1;
 
-    static final String CREATE_STOCK_TABLE = "create table stock ( " +
+    private static final String CREATE_STOCK_TABLE = "create table stock ( " +
             "code integer primary key not null, " +
             "name text not null );";
 
-    static final String DROP_STOCK_TABLE = "drop table stock;";
+    private static final String DROP_STOCK_TABLE = "drop table stock;";
 
-    public static DBHelper getInstance(Context context)
+    static DBHelper getInstance(Context context)
     {
         if (instance == null)
         {

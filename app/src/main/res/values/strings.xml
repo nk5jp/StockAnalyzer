@@ -4,4 +4,6 @@
     <string name="str_code">Code</string>
     <string name="str_name">Name</string>
     <string name="str_add">Add</string>
+    <string name="str_delete">Delete</string>
+    <string name="str_addedit">Add/Edit</string>
 </resources>

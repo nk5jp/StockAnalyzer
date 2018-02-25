@@ -21,22 +21,39 @@ public class StockApplication {
         this.repository = StockRepositoryDB.getInstance(context);
     }
 
-    public void addStock(int code, String name)
+    public void addEditStock(int code, String name)
     {
         try {
-            if (repository.hasSameCode(code))
-            {
-                listener.showError("the code is already used");
-                return;
-            }
             if (name.equals(""))
             {
                 listener.showError("name is empty");
                 return;
             }
-            repository.setStock(new Stock(code, name));
+            if (repository.hasSameCode(code))
+            {
+                repository.updateStock(code, name);
+            } else {
+                repository.setStock(code, name);
+            }
+            getStock();
         } catch (Exception e) {
             listener.showError("cannot add stock");
+        }
+    }
+
+    public void selectStock(int code, String name)
+    {
+        viewModel.setCode(code);
+        viewModel.setName(name);
+        listener.updateView();
+    }
+
+    public void getStock()
+    {
+        try {
+            viewModel.setStocks(repository.getAllStock());
+        } catch (Exception e) {
+            listener.showError("cannot get stocks");
         }
     }
 

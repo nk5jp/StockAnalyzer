@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.Locale;
+
 import jp.nk5.stockanalyzer.viewmodel.UpdateViewListener;
 
 public class BaseActivity extends Activity implements UpdateViewListener {
@@ -28,6 +30,18 @@ public class BaseActivity extends Activity implements UpdateViewListener {
     public void showError(String error)
     {
         Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+    }
+
+    protected void setIntegerToEditText(int id, int value)
+    {
+        EditText editText = findViewById(id);
+        editText.setText(String.format(Locale.JAPAN, "%d", value));
+    }
+
+    protected void setStringToEditText(int id, String value)
+    {
+        EditText editText = findViewById(id);
+        editText.setText(value);
     }
 
 }
