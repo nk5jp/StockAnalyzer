@@ -10,7 +10,7 @@ public class Stock {
     @Getter @Setter
     private String name;
 
-    public Stock (int code, String name)
+    public Stock(int code, String name)
     {
         this.code = code;
         this.name = name;

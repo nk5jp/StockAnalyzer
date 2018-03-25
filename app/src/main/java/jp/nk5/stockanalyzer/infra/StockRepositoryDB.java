@@ -1,16 +1,20 @@
 package jp.nk5.stockanalyzer.infra;
 
 import android.content.Context;
+import android.util.SparseArray;
 
 import java.util.List;
 
+import jp.nk5.stockanalyzer.domain.DailyData;
 import jp.nk5.stockanalyzer.domain.Stock;
 import jp.nk5.stockanalyzer.domain.StockRepository;
 
 public class StockRepositoryDB implements StockRepository {
 
     private List<Stock> stocks;
-    private StockDAO dao;
+    private SparseArray<List<DailyData>> dailyDataArray;
+    private StockDAO stockDao;
+    private DailyDataDAO dailyDataDAO;
     private static StockRepositoryDB instance;
 
     public static StockRepositoryDB getInstance(Context context)
@@ -23,14 +27,17 @@ public class StockRepositoryDB implements StockRepository {
     }
 
     private StockRepositoryDB(Context context) {
-        this.dao = new StockDAO(context);
+        this.stockDao = new StockDAO(context);
+        this.dailyDataDAO = new DailyDataDAO(context);
     }
 
     public void setStock(int code, String name) throws Exception {
         initializeCollection();
         Stock stock = new Stock(code, name);
-        dao.createStock(stock);
+        stockDao.createStock(stock);
         stocks.add(stock);
+        List<DailyData> dailyDataList = dailyDataDAO.readDailyDataByCode(code);
+        dailyDataArray.put(code, dailyDataList);
     }
 
     public boolean hasSameCode(int code) throws Exception
@@ -48,12 +55,13 @@ public class StockRepositoryDB implements StockRepository {
 
     public List<Stock> getAllStock() throws Exception {
         initializeCollection();
-        return this.stocks;
+        return stocks;
     }
 
     public void updateStock(int code, String name) throws Exception {
+        initializeCollection();
         Stock tmpStock = new Stock(code, name);
-        dao.updateStock(tmpStock);
+        stockDao.updateStock(tmpStock);
         for (Stock stock : stocks) {
             if (stock.getCode() == code)
             {
@@ -66,8 +74,28 @@ public class StockRepositoryDB implements StockRepository {
     {
         if (this.stocks == null)
         {
-            this.stocks = dao.readAllStock();
+            stocks = stockDao.readAllStock();
+            dailyDataArray = new SparseArray<>();
+            for (Stock stock : stocks)
+            {
+                int code = stock.getCode();
+                List<DailyData> dailyDataList = dailyDataDAO.readDailyDataByCode(code);
+                dailyDataArray.put(code, dailyDataList);
+            }
         }
+    }
+
+    public void removeStock(int code) throws Exception
+    {
+
+    }
+
+    public void setDailyData(int code, int price, int year, int month, int day) throws Exception
+    {
+        initializeCollection();
+        DailyData dailyData = new DailyData(code, year, month ,day, price);
+        dailyDataDAO.create(dailyData, "DailyData");
+        dailyDataArray.get(code).add(dailyData);
     }
 
 }

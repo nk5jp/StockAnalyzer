@@ -15,13 +15,13 @@ public class BaseActivity extends Activity implements UpdateViewListener {
 
     }
 
-    protected int getIntegerFromEditText(int id) throws Exception
+    protected int getIntegerFromEditText(int id)
     {
         EditText editText = findViewById(id);
         return Integer.parseInt(editText.getText().toString());
     }
 
-    protected String getStringFromEditText(int id) throws Exception
+    protected String getStringFromEditText(int id)
     {
         EditText editText = findViewById(id);
         return editText.getText().toString();

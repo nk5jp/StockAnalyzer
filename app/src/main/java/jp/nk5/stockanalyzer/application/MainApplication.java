@@ -3,6 +3,7 @@ package jp.nk5.stockanalyzer.application;
 import android.content.Context;
 
 import java.util.List;
+import java.util.Locale;
 
 import jp.nk5.stockanalyzer.domain.StockRepository;
 import jp.nk5.stockanalyzer.infra.StockRepositoryDB;
@@ -45,6 +46,19 @@ public class MainApplication implements SearchMinkabuListener {
         } else {
             viewModel.setCurrentStocks(stocks);
             listener.updateView();
+        }
+    }
+
+    public void saveCurrentPrice(int year, int month, int day) {
+        for (CurrentStock currentStock : viewModel.getCurrentStocks()) {
+            int code = currentStock.getCode();
+            int price = currentStock.getPrice();
+            try {
+                stockRepository.setDailyData(code, price, year, month, day);
+            } catch (Exception e) {
+                listener.showError(String.format(Locale.JAPAN, "failed to save %d", code));
+                break;
+            }
         }
     }
 

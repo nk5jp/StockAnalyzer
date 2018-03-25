@@ -2,7 +2,6 @@ package jp.nk5.stockanalyzer.application;
 
 import android.content.Context;
 
-import jp.nk5.stockanalyzer.domain.Stock;
 import jp.nk5.stockanalyzer.domain.StockRepository;
 import jp.nk5.stockanalyzer.infra.StockRepositoryDB;
 import jp.nk5.stockanalyzer.viewmodel.StockViewModel;
@@ -12,13 +11,13 @@ public class StockApplication {
 
     private UpdateViewListener listener;
     private StockViewModel viewModel;
-    private StockRepository repository;
+    private StockRepository stockRepository;
 
     public StockApplication (Context context, UpdateViewListener listener, StockViewModel viewModel)
     {
         this.listener = listener;
         this.viewModel = viewModel;
-        this.repository = StockRepositoryDB.getInstance(context);
+        this.stockRepository = StockRepositoryDB.getInstance(context);
     }
 
     public void addEditStock(int code, String name)
@@ -29,15 +28,28 @@ public class StockApplication {
                 listener.showError("name is empty");
                 return;
             }
-            if (repository.hasSameCode(code))
+            if (stockRepository.hasSameCode(code))
             {
-                repository.updateStock(code, name);
+                stockRepository.updateStock(code, name);
             } else {
-                repository.setStock(code, name);
+                stockRepository.setStock(code, name);
             }
             getStock();
         } catch (Exception e) {
             listener.showError("cannot add stock");
+        }
+    }
+
+    public void deleteStock(int code)
+    {
+        try {
+            if (stockRepository.hasSameCode(code)) {
+                stockRepository.removeStock(code);
+            } else {
+                listener.showError("the code does not exist");
+            }
+        } catch (Exception e) {
+            listener.showError("cannot delete stock");
         }
     }
 
@@ -51,7 +63,7 @@ public class StockApplication {
     public void getStock()
     {
         try {
-            viewModel.setStocks(repository.getAllStock());
+            viewModel.setStocks(stockRepository.getAllStock());
         } catch (Exception e) {
             listener.showError("cannot get stocks");
         }

@@ -49,7 +49,9 @@ public class StockActivity extends BaseActivity implements ListView.OnItemClickL
 
     public void onClickDeleteButton(View view)
     {
-
+        int code = getIntegerFromEditText(R.id.editText1);
+        application.deleteStock(code);
+        this.finish();
     }
 
     @Override

@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 public class DailyData {
 
     @Getter
+    private int code;
+    @Getter
     private int year;
     @Getter
     private int month;

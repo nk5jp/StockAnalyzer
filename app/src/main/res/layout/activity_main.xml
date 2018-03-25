@@ -17,6 +17,13 @@
             android:onClick="onClickStockButton"
             android:text="@string/str_stock" />
 
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickSaveButton"
+            android:text="@string/str_save" />
+
         <ListView
             android:id="@+id/listView1"
             android:layout_width="match_parent"
