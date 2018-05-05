@@ -2,6 +2,7 @@ package jp.nk5.stockanalyzer;
 
 import android.app.Activity;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Locale;
@@ -42,6 +43,12 @@ public class BaseActivity extends Activity implements UpdateViewListener {
     {
         EditText editText = findViewById(id);
         editText.setText(value);
+    }
+
+    protected void setStringToTextView(int id, String value)
+    {
+        TextView textView = findViewById(id);
+        textView.setText(value);
     }
 
 }

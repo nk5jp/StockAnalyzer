@@ -7,4 +7,8 @@
     <string name="str_delete">Delete</string>
     <string name="str_addedit">Add/Edit</string>
     <string name="str_save">Save</string>
+    <string name="str_colon">:</string>
+    <string name="str_price">Price</string>
+    <string name="str_graph">Graph</string>
+    <string name="str_analysis">Analysis</string>
 </resources>
