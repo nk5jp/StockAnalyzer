@@ -3,11 +3,13 @@ package jp.nk5.stockanalyzer.infra;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
 import java.util.List;
 import java.util.Locale;
 
 import jp.nk5.stockanalyzer.domain.DailyData;
+import jp.nk5.stockanalyzer.viewmodel.DailyDataViewModel;
 
 public class DailyDataDAO extends DAO <DailyData> {
 
@@ -20,6 +22,21 @@ public class DailyDataDAO extends DAO <DailyData> {
     {
         return read("select * from DailyData where code = ? order by year, month, day;",
                 new String[]{String.format(Locale.JAPAN, "%d", code)});
+    }
+
+    public void updateDailyData(DailyData dailyData) throws Exception
+    {
+        update(dailyData, "DailyData", "code = ? and year = ? and month = ? and day = ?", getArgs(dailyData));
+    }
+
+    public void deleteDailyData(DailyData dailyData) throws Exception
+    {
+        delete( "DailyData", "code = ? and year = ? and month = ? and day = ?", getArgs(dailyData));
+    }
+
+    public void deleteAll(int code) throws Exception
+    {
+        delete( "DailyData", "code = ?", new String[]{Integer.toString(code)});
     }
 
     @Override
@@ -49,8 +66,13 @@ public class DailyDataDAO extends DAO <DailyData> {
 
     }
 
-    @Override
-    protected String[] getArgs(DailyData entity) {
-        return new String[0];
+    private String[] getArgs(DailyData dailyData)
+    {
+        return new String[]{
+                Integer.toString(dailyData.getCode()),
+                Integer.toString(dailyData.getYear()),
+                Integer.toString(dailyData.getMonth()),
+                Integer.toString(dailyData.getDay())
+        };
     }
 }

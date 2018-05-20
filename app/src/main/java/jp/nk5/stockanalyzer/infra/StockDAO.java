@@ -27,7 +27,12 @@ public class StockDAO extends DAO <Stock> {
 
     void updateStock(Stock stock) throws Exception
     {
-        update(stock, "STOCK", "code = ?");
+        update(stock, "STOCK", "code = ?", getArgs(stock));
+    }
+
+    void deleteStock(Stock stock) throws Exception
+    {
+        delete("STOCK", "code = ?", getArgs(stock));
     }
 
     @Override

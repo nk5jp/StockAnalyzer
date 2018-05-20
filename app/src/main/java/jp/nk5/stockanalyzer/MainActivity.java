@@ -64,7 +64,8 @@ public class MainActivity extends BaseActivity implements DatePickerDialog.OnDat
 
     public void onDateSet(DatePicker view, int year, int month, int day)
     {
-        application.saveCurrentPrice(year, month, day);
+        application.saveCurrentPrice(year, month + 1, day);
+        updateView();
     }
 
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

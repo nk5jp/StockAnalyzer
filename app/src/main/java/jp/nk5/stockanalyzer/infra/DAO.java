@@ -48,12 +48,25 @@ public abstract class DAO <T> {
         }
     }
 
-    void update(T entity, String tableName, String condition) throws Exception {
+    void update(T entity, String tableName, String condition, String[] args) throws Exception {
         ContentValues contentValues = transformEntityToValues(entity);
         try (SQLiteDatabase db = DBHelper.getInstance(context).getWritableDatabase()) {
             db.beginTransaction();
-            long updateRaw = db.update(tableName, contentValues, condition, getArgs(entity));
+            long updateRaw = db.update(tableName, contentValues, condition, args);
             if (updateRaw == -1) {
+                throw new Exception();
+            } else {
+                db.setTransactionSuccessful();
+            }
+            db.endTransaction();
+        }
+    }
+
+    public void delete(String tableName, String condition, String[] args) throws Exception {
+        try (SQLiteDatabase db = DBHelper.getInstance(context).getWritableDatabase()) {
+            db.beginTransaction();
+            long deleteRaw = db.delete(tableName, condition, args);
+            if (deleteRaw == -1) {
                 throw new Exception();
             } else {
                 db.setTransactionSuccessful();
@@ -65,6 +78,5 @@ public abstract class DAO <T> {
     protected abstract T transformCursorToEntity(Cursor cursor) throws Exception;
     protected abstract ContentValues transformEntityToValues(T entity) throws Exception;
     protected abstract void updateEntityById(T entity, long rowId) throws Exception;
-    protected abstract String[] getArgs(T entity);
 
 }

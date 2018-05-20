@@ -15,7 +15,7 @@ public class DailyData {
     private int month;
     @Getter
     private int day;
-    @Getter
+    @Getter @Setter
     private int price;
 
 }
