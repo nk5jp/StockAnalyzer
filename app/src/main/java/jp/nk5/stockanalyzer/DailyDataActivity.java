@@ -65,13 +65,13 @@ public class DailyDataActivity extends BaseActivity implements DatePickerDialog.
         int day = dailyData.getDay();
         int price = dailyData.getPrice();
         application.selectDailyData(year, month, day, price);
-        updateView();
     }
 
     public void onDateSet(DatePicker view, int year, int month, int day)
     {
         int price = getIntegerFromEditText(R.id.editText1);
         application.savePrice(year, month + 1, day, price);
+        updateView();
     }
 
     @Override

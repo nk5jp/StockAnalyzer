@@ -2,6 +2,7 @@ package jp.nk5.stockanalyzer.application;
 
 import android.content.Context;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jp.nk5.stockanalyzer.domain.DailyData;
@@ -15,6 +16,7 @@ public class DailyDataApplication {
     private UpdateViewListener listener;
     private DailyDataViewModel viewModel;
     private StockRepository repository;
+    private final int DAILYDATA_MAX = 40;
 
     public DailyDataApplication (Context context, UpdateViewListener listener, DailyDataViewModel viewModel)
     {
@@ -25,7 +27,7 @@ public class DailyDataApplication {
 
     public void getDailyData(){
         try {
-            viewModel.setDailyData(repository.getDailyDataByCode(viewModel.getCode()));
+            viewModel.setDailyData(getLatestDailyData(repository.getDailyDataByCode(viewModel.getCode())));
         } catch (Exception e)
         {
             listener.showError("cannot get Daily Data");
@@ -39,6 +41,7 @@ public class DailyDataApplication {
         try {
             if (isDeleteCase(price)) {
                 repository.removeDailyData(code, year, month, day);
+                viewModel.setDailyData(getLatestDailyData(repository.getDailyDataByCode(viewModel.getCode())));
                 return;
             }
             if (isUpdateCase(code, year, month, day)) {
@@ -46,6 +49,7 @@ public class DailyDataApplication {
                 return;
             }
             repository.setDailyData(code, price, year, month, day);
+            viewModel.setDailyData(getLatestDailyData(repository.getDailyDataByCode(viewModel.getCode())));
         } catch (Exception e) {
             listener.showError("cannot save price");
         }
@@ -67,6 +71,22 @@ public class DailyDataApplication {
     private boolean isUpdateCase(int code, int year, int month, int day) throws  Exception
     {
         return repository.hasSameDailyData(code, year, month, day);
+    }
+
+    private List<DailyData> getLatestDailyData(List<DailyData> allDailyData)
+    {
+        int size = allDailyData.size();
+        List<DailyData> dailyData = new ArrayList<>();
+        int i = 0;
+        if (size > DAILYDATA_MAX)
+        {
+            i = size - DAILYDATA_MAX;
+        }
+        for (; i < size; i++)
+        {
+            dailyData.add(allDailyData.get(i));
+        }
+        return dailyData;
     }
 
 }
